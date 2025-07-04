@@ -1,14 +1,14 @@
-from pyrogram import Client, filters
 from flask import Flask
 import threading
 import os
+from pyrogram import Client, filters
 
-# Read from environment variables
-API_ID = int(os.environ.get("API_ID", "123456"))           # replace default with your real API_ID
-API_HASH = os.environ.get("API_HASH", "your_api_hash")
-BOT_TOKEN = os.environ.get("BOT_TOKEN", "your_bot_token")
+# Read secrets from environment variables
+API_ID = int(os.environ.get("API_ID", "123456"))        # default just in case
+API_HASH = os.environ.get("API_HASH", "default_api_hash")
+BOT_TOKEN = os.environ.get("BOT_TOKEN", "default_bot_token")
 
-# Create Pyrogram bot client
+# Initialize Pyrogram bot client
 bot = Client(
     "my_bot",
     api_id=API_ID,
@@ -16,21 +16,21 @@ bot = Client(
     bot_token=BOT_TOKEN
 )
 
-# Create Flask app
+# Initialize Flask app
 app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return "Bot is running!"
+    return "✅ Bot is running!"
 
 def run_flask():
-    port = int(os.environ.get("PORT", 5000))
+    port = int(os.environ.get("PORT", 5000))  # Render will pass $PORT
     app.run(host='0.0.0.0', port=port)
 
-# Example command: /start
+# Define a command handler
 @bot.on_message(filters.command("start"))
 async def start_command(client, message):
-    await message.reply_text("Hello! ✅ Bot is running.")
+    await message.reply_text("✅ Hello! Your bot is working!")
 
 if __name__ == "__main__":
     # Start Flask server in background
